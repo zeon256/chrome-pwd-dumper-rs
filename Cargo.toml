@@ -1,0 +1,20 @@
+[package]
+name = "chrome-pwd-dumper"
+version = "0.1.0"
+authors = ["Budi Syahiddin <budisyahiddin@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+app_dirs = "1.2.1"
+rusqlite = { version = "0.17.0", features = ["bundled"]}
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["dpapi"] }
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+
+
