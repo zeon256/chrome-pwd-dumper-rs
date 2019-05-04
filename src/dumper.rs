@@ -12,28 +12,23 @@ pub fn close_chrome() {
     Command::new("taskkill")
         .args(&["/F", "/IM", "chrome.exe"])
         .output()
-        .unwrap();
+        .expect("There was an error closing google chrome!");
 }
 
 fn find_chrome_path() -> Box<Path> {
     let app_info = AppInfo { name: "Chrome", author: "Google" };
     let path_buf =
-        get_app_dir(AppDataType::UserCache, &app_info, "User Data/Default/Login Data");
+        get_app_dir(AppDataType::UserCache, &app_info, "User Data/Default/Login Data")
+            .expect("No chrome found!");
 
-    match path_buf {
-        Ok(pf) => pf.into_boxed_path(),
-        Err(_) => panic!("No chrome found!")
-    }
+    path_buf.into_boxed_path()
 }
 
 fn query_accounts() -> Result<Vec<ChromeAccount>, Error> {
     let db_url = find_chrome_path();
-    let conn_res = Connection::open(db_url);
+    let conn = Connection::open(db_url)
+        .expect("Login Data not found!");
 
-    let conn = match conn_res {
-        Ok(conn) => conn,
-        Err(_) => panic!("Login Data not found!")
-    };
     let mut stmt = conn.prepare(STMT)?;
 
     let chrome_acc_iter = stmt
