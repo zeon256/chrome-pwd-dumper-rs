@@ -20,6 +20,9 @@ cargo build --release
 cargo rustc --release -- -C target-cpu=native
 ```
 
+## How to run
+Double click the `exe` after building and it should spit out the passwords in a text file in the same directory
+
 ## License
 chrome-pwd-dumper-rs is licensed under MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
 
