@@ -1,6 +1,9 @@
 # chrome-pwd-dumper-rs
 A chrome password dumper written in Rust
 
+# Compatibility
+- Microsoft Windows only!
+
 ## Motivation
 I previously wrote a version in Kotlin and there are quite a number of problems with it.
 - Host target requires JRE installed, if no JRE is installed it cannot run
@@ -10,7 +13,11 @@ I previously wrote a version in Kotlin and there are quite a number of problems 
 ## How to build
 > You might need sqlite3.lib
 ```
+// recommended
 cargo build --release
+
+// for more optimised builds (If target is not the same as your cpu it might not work!)
+cargo rustc --release -- -C target-cpu=native
 ```
 
 ## License
