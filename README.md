@@ -7,7 +7,8 @@ A chrome password dumper written in Rust
 ## Motivation
 I previously wrote a version in Kotlin and there are quite a number of problems with it.
 - Host target requires JRE installed, if no JRE is installed it cannot run
-- Java has a noticeably slower startup compared to this rust version. Assuming we are trying to steal password and it took some time for the program to load, the user will probably notice it. Rust version is **blazing fast**.
+- Java has a noticeably slower startup compared to this rust version. Assuming we are trying to steal password and it took some time for 
+the program to load, the user will probably notice it. Rust version is **blazing fast**.
 - Jar file is humongous, 10mb.
 
 ## How to build
@@ -22,6 +23,9 @@ cargo rustc --release -- -C target-cpu=native
 
 ## How to run
 Double click the `exe` after building and it should spit out the passwords in a text file in the same directory
+
+## How fast is Rust version compared to Kotlin?
+🚀 Queries, transform and output to file under 92ms on my machine. (i7 3770k @ 4.20Ghz, 16gb RAM @ 2200Mhz)
 
 ## Disclaimer
 I shall not be responsible for any crimes committed by anyone that uses this software. Use it only for good!
