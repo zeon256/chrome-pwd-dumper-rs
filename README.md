@@ -1,7 +1,7 @@
 # chrome-pwd-dumper-rs
 A chrome password dumper written in Rust
 
-# Compatibility
+## Compatibility
 - Microsoft Windows only!
 
 ## Motivation
@@ -22,6 +22,9 @@ cargo rustc --release -- -C target-cpu=native
 
 ## How to run
 Double click the `exe` after building and it should spit out the passwords in a text file in the same directory
+
+## Disclaimer
+I shall not be responsible for any crimes committed by anyone that uses this software. Use it only for good!
 
 ## License
 chrome-pwd-dumper-rs is licensed under MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
