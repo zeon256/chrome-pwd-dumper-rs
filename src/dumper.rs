@@ -20,6 +20,7 @@ fn find_chrome_path() -> Box<Path> {
         name: "Chrome",
         author: "Google",
     };
+
     let path_buf = get_app_dir(
         AppDataType::UserCache,
         &app_info,
@@ -33,7 +34,6 @@ fn find_chrome_path() -> Box<Path> {
 fn query_accounts() -> Result<Vec<ChromeAccount>, Error> {
     let db_url = find_chrome_path();
     let conn = Connection::open(db_url).expect("Login Data not found!");
-
     let mut stmt = conn.prepare(STMT)?;
 
     let chrome_accounts = stmt
