@@ -6,10 +6,10 @@ edition = "2018"
 
 [dependencies]
 app_dirs = "1.2.1"
-rusqlite = { version = "0.17.0", features = ["bundled"]}
+rusqlite = { version = "0.18.0", features = ["bundled"]}
 
 [target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3", features = ["dpapi"] }
+winapi = { version = "0.3.7", features = ["dpapi"] }
 
 [profile.dev]
 opt-level = 0

@@ -36,38 +36,28 @@ fn query_accounts() -> Result<Vec<ChromeAccount>, Error> {
 
     let mut stmt = conn.prepare(STMT)?;
 
-    let chrome_acc_iter = stmt
+    let chrome_accounts = stmt
         .query_map(NO_PARAMS, |row| {
             Ok(ChromeAccount::new(row.get(0)?, row.get(1)?, row.get(2)?))
         })
-        .unwrap();
-
-    let mut chrome_accounts: Vec<ChromeAccount> = vec![];
-
-    for chrome_acc in chrome_acc_iter {
-        chrome_accounts.push(chrome_acc.unwrap());
-    }
+        .unwrap()
+        .map(|acc| acc.unwrap())
+        .collect();
 
     return Ok(chrome_accounts);
 }
 
 pub fn dump_to_file() {
-    let dump_res = query_accounts();
-    let mut accounts = match dump_res {
-        Ok(chrome_acc) => chrome_acc,
-        Err(_) => panic!("Query failed"),
-    };
-
-    let mut finalize_str = String::new();
-
-    for acc in &mut accounts {
-        finalize_str.push_str(format!("{}\r\n", acc.humanize()).as_str());
-    }
+    let final_str: String = query_accounts()
+        .unwrap()
+        .iter_mut()
+        .map(|acc| format!("{}\r\n", acc.humanize()))
+        .collect();
 
     let mut file = File::create("./dump.txt").expect("Unable to create file");
-    let res = file.write_all(finalize_str.as_bytes());
+    let res = file.write_all(final_str.as_bytes());
     match res {
-        Ok(_) => println!("Dumped"),
+        Ok(_) => println!("Dumped!"),
         Err(_) => panic!("Dump failed!"),
     };
 }

