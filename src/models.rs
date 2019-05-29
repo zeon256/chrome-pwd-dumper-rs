@@ -2,7 +2,6 @@ use winapi::um::dpapi::CryptUnprotectData;
 use winapi::um::wincrypt::{CRYPTOAPI_BLOB, DATA_BLOB};
 use winapi::um::winnt::LPWSTR;
 
-#[derive(Debug)]
 pub struct ChromeAccount {
     pub website: String,
     pub username_value: String,
