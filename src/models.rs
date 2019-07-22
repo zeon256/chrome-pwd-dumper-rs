@@ -1,11 +1,37 @@
+use serde::Serialize;
 use winapi::um::dpapi::CryptUnprotectData;
 use winapi::um::wincrypt::{CRYPTOAPI_BLOB, DATA_BLOB};
 use winapi::um::winnt::LPWSTR;
 
+#[derive(Serialize, Debug)]
 pub struct ChromeAccount {
     pub website: String,
     pub username_value: String,
     pub password_value: Vec<u8>,
+}
+
+#[derive(Serialize, Debug)]
+pub struct DecryptedAccount {
+    pub website: String,
+    pub username_value: String,
+    pub decrypted_pwd: String,
+}
+
+impl DecryptedAccount {
+    pub fn new(website: String, username_value: String, decrypted_pwd: String) -> Self {
+        DecryptedAccount {
+            website,
+            username_value,
+            decrypted_pwd,
+        }
+    }
+}
+
+impl Into<DecryptedAccount> for ChromeAccount {
+    fn into(mut self) -> DecryptedAccount {
+        let decrypted = self.get_clear_text_pw();
+        DecryptedAccount::new(self.website, self.username_value, decrypted)
+    }
 }
 
 impl ChromeAccount {
@@ -50,25 +76,6 @@ impl ChromeAccount {
             let size = data_out.cbData as usize;
 
             String::from_raw_parts(data_out.pbData, size, size)
-        }
-    }
-
-    pub fn humanize(&mut self) -> String {
-        let website = self.website.clone();
-        let username = self.username_value.clone();
-
-        if self.password_value.len() > 0 && !self.username_value.is_empty() {
-            format!(
-                "Website: {}, Username: {}, Password: {}",
-                website,
-                username,
-                &mut self.get_clear_text_pw()
-            )
-        } else {
-            format!(
-                "Website: {}, Username: {}, Password: [ INVALID ]",
-                website, username
-            )
         }
     }
 }

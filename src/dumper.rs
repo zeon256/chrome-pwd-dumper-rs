@@ -1,12 +1,15 @@
-use crate::models::ChromeAccount;
+use crate::models::{ChromeAccount, DecryptedAccount};
+use crate::rayon::iter::ParallelIterator;
 use app_dirs::{get_app_dir, AppDataType, AppInfo};
+use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator};
 use rusqlite::{Connection, Error, NO_PARAMS};
+use serde_json::to_string_pretty;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use std::process::Command;
 
-const STMT: &'static str = "SELECT action_url, username_value, password_value FROM logins";
+const STMT: &str = "SELECT action_url, username_value, password_value FROM logins";
 
 pub fn close_chrome() {
     Command::new("taskkill")
@@ -47,17 +50,39 @@ fn query_accounts() -> Result<Vec<ChromeAccount>, Error> {
     return Ok(chrome_accounts);
 }
 
-pub fn dump_to_file() {
-    let final_str: String = query_accounts()
+pub fn dump(filename: &str, format: String, is_print: bool, is_dump: bool) {
+    let mut accounts: Vec<DecryptedAccount> = query_accounts()
         .unwrap()
-        .iter_mut()
-        .map(|acc| format!("{}\r\n", acc.humanize()))
+        .into_par_iter()
+        .filter(|acc| !acc.password_value.is_empty() && !acc.website.is_empty())
+        .map(|acc| acc.into())
         .collect();
 
-    let mut file = File::create("./dump.txt").expect("Unable to create file");
-    let res = file.write_all(final_str.as_bytes());
-    match res {
-        Ok(_) => println!("Dumped!"),
-        Err(_) => panic!("Dump failed!"),
+    let (ser, final_filename) = if format.eq("JSON") {
+        let mut final_file = filename.to_string();
+        final_file.push_str(".json");
+        (to_string_pretty(&accounts).unwrap(), final_file)
+    } else {
+        let end = accounts
+            .into_par_iter()
+            .map(|acc: &mut DecryptedAccount| format!("{:?}\r\n", acc))
+            .collect();
+
+        let mut final_file = filename.to_string();
+        final_file.push_str(".txt");
+        (end, final_file)
     };
+
+    if is_print {
+        println!("{}", &ser);
+    }
+
+    if is_dump {
+        let mut file = File::create(final_filename).expect("Unable to create file");
+        let res = file.write_all(ser.as_bytes());
+        match res {
+            Ok(_) => println!("Dumped!"),
+            Err(_) => panic!("Dump failed!"),
+        };
+    }
 }
