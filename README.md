@@ -72,9 +72,6 @@ cargo rustc --release -- -C target-cpu=native
 
 ```
 
-## How to run
-Double click the `exe` after building and it should spit out the passwords in a text file in the same directory
-
 ## How fast is Rust version compared to Kotlin?
 🚀 Queries, transform and output to file under 112ms on my machine. (i7 3770k @ 4.20Ghz, 16gb RAM @ 2200Mhz)
 
