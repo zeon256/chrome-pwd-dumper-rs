@@ -17,6 +17,46 @@ I previously wrote a version in Kotlin and there are quite a number of problems 
 the program to load, the user will probably notice it. Rust version is **blazing fast**.
 - Jar file is humongous, 10mb. Binary produced by Rust is 2.7mb.
 
+
+## Flags
+```
+chrome-pwd-dumper-rs 0.2.0
+Budi Syahiddin, <budisyahiddin@gmail.com>
+Windows Google Chrome Password dumper that doesn't require admin rights
+
+USAGE:
+    chrome-pwd-dumper.exe [FLAGS] [OPTIONS]
+
+FLAGS:
+    -d, --dump       Do you want to dump to a file
+    -h, --help       Prints help information
+    -p, --print      Prints dump to stdout. Format is the same as the one provided with `-f`
+    -V, --version    Prints version information
+
+OPTIONS:
+    -n, --filename <filename>    Sets the filename of the text file. Defaults to `dump` if no nothing is provided
+    -f, --format <format>        Choose your preferred format. Only `json` and `txt` are allowed. If not provided, `txt`
+                                 is picked
+
+```
+
+## Example Usage
+```
+./chrome-pwd-dumper.exe -n hello_world -f json -p -d
+[
+  {
+    "website": "https://github.com",
+    "username_value": "helloworld@gmail.com",
+    "decrypted_pwd": "<REDACTED>"
+  },
+  {
+    "website": "https://gitlab.com",
+    "username_value": "helloworld@gmail.com",
+    "decrypted_pwd": "<REDACTED>"
+  },  
+]
+```
+
 ## How to build
 > You might need sqlite3.lib to compile
 ```
