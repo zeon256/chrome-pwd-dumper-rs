@@ -6,6 +6,9 @@ edition = "2018"
 
 [dependencies]
 app_dirs = "1.2.1"
+clap = "2"
+lettre = "0.9"
+lettre_email = "0.9"
 rusqlite = { version = "0.18.0", features = ["bundled"]}
 
 [target.'cfg(windows)'.dependencies]
