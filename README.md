@@ -13,7 +13,7 @@ You can make a PR if it works on older versions of Windows
 ## Motivation
 I previously wrote a version in Kotlin and there are quite a number of problems with it.
 - Host target requires JRE installed, if no JRE is installed it cannot run
-- Java has a noticeably slower startup compared to this rust version. Assuming we are trying to steal password and it took some time for 
+- Java has a noticeably slower startup compared to this rust version (no 💩 bro). Assuming we are trying to steal password and it took some time for 
 the program to load, the user will probably notice it. Rust version is **blazing fast**.
 - Jar file is humongous, 10mb. Binary produced by Rust is 3.8mb.
 
@@ -58,6 +58,7 @@ OPTIONS:
 ```
 
 ## How to build
+Since this software can be used maliciously, #justbuildyourselflol
 > You might need sqlite3.lib to compile
 ```
 // recommended
@@ -75,9 +76,5 @@ cargo rustc --release -- -C target-cpu=native
 ## How fast is Rust version compared to Kotlin?
 🚀 Queries, transform and output to file under 112ms on my machine. (i7 3770k @ 4.20Ghz, 16gb RAM @ 2200Mhz)
 
-## Disclaimer
-I shall not be responsible for any crimes committed by anyone that uses this software. Use it only for good!
-
 ## License
 chrome-pwd-dumper-rs is licensed under MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
-
