@@ -75,7 +75,7 @@ cargo rustc --release -- -C target-cpu=native
 ```
 
 ## How fast is Rust version compared to Kotlin?
-🚀 Queries, transform and output to file under 112ms on my machine. (i7 3770k @ 4.20Ghz, 16gb RAM @ 2200Mhz)
+🚀 Queries, transform and output to json file under 100ms on my machine. (i7 3770k @ 4.30Ghz, 16gb RAM @ 2200Mhz)
 
 ## License
 chrome-pwd-dumper-rs is licensed under MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
