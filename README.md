@@ -55,6 +55,7 @@ OPTIONS:
     "decrypted_pwd": "<REDACTED>"
   },  
 ]
+Dumped!
 ```
 
 ## How to build

@@ -1,7 +1,7 @@
 use crate::models::{ChromeAccount, DecryptedAccount};
 use crate::rayon::iter::ParallelIterator;
 use app_dirs::{get_app_dir, AppDataType, AppInfo};
-use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator};
+use rayon::iter::{IntoParallelIterator};
 use rusqlite::{Connection, Error, NO_PARAMS};
 use serde_json::to_string_pretty;
 use std::fs::File;
@@ -51,7 +51,7 @@ fn query_accounts() -> Result<Vec<ChromeAccount>, Error> {
 }
 
 pub fn dump(filename: &str, format: String, is_print: bool, is_dump: bool) {
-    let mut accounts: Vec<DecryptedAccount> = query_accounts()
+    let accounts: Vec<DecryptedAccount> = query_accounts()
         .unwrap()
         .into_par_iter()
         .filter(|acc| !acc.password_value.is_empty() && !acc.website.is_empty())
@@ -65,7 +65,7 @@ pub fn dump(filename: &str, format: String, is_print: bool, is_dump: bool) {
     } else {
         let end = accounts
             .into_par_iter()
-            .map(|acc: &mut DecryptedAccount| format!("{:?}\r\n", acc))
+            .map(|acc| format!("{:?}\r\n", acc))
             .collect();
 
         let mut final_file = filename.to_string();
