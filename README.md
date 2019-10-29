@@ -2,7 +2,7 @@
 A Windows Google Chrome Password Dumper written in Rust
 
 <p align="center">
-  <img width="460" height="300" src="./logo.png">
+  <img width="500" height="380" src="./logo.png">
 </p>
 
 ## Compatibility
