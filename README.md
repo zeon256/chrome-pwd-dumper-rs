@@ -1,5 +1,5 @@
 # chrome-pwd-dumper-rs
-A Windows Google Chrome Password Dumper written in Rust
+A Windows Chromium based password dumper written in rust
 
 <p align="center">
   <img width="500" height="380" src="./logo.png">
