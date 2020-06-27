@@ -56,8 +56,20 @@ ARGS:
             },
         ],
     },
+    Dumper {
+        app_info: AppInfo {
+            name: "User Data",
+            author: "Chromium",
+        },
+        accounts: [
+            DecryptedAccount {
+                website: "https://app.houseparty.com/login",
+                username_value: "xXxChromeSlayer420xXx",
+                pwd: "xXxChromeSlayer420xXx",
+            },
+        ],
+    }
 ]
-Dumped!
 ```
 
 ## How to build
