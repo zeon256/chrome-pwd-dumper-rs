@@ -61,7 +61,6 @@ Dumped!
 ```
 
 ## How to build
-Since this software can be used maliciously, #justbuildyourselflol
 ```
 // recommended
 cargo build --release
