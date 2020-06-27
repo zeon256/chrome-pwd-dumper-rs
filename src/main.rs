@@ -48,7 +48,7 @@ lazy_static! {
 }
 
 fn main() -> Result<(), DumperError> {
-    let opt: Opt = Opt::from_args();
+    let mut opt: Opt = Opt::from_args();
     fs::remove_dir_all("./.tmp");
     fs::create_dir("./.tmp")?;
 
@@ -81,14 +81,18 @@ fn main() -> Result<(), DumperError> {
         println!("{:#?}", data);
     }
 
-    let (buf, file_name) = if opt.format.eq("json") {
-        (serde_json::to_string_pretty(data.as_slice())
-            .map_err(|e| DumperError::JsonError(e))?, opt.file_name.as_path())
+    let buf = if opt.format.eq("json") {
+        serde_json::to_string_pretty(data.as_slice())
+            .map_err(|e| DumperError::JsonError(e))?
     } else {
-        (format!("{:#?}", data), Path::new("dump.txt"))
+        format!("{:#?}", data)
     };
 
-    fs::write(file_name, buf.as_bytes()).map_err(|_| DumperError::IoError);
+    let mut path = opt.file_name.into_os_string();
+    path.push(".");
+    path.push(opt.format.as_str());
+
+    fs::write(path, buf.as_bytes()).map_err(|_| DumperError::IoError);
     fs::remove_dir_all("./.tmp");
     Ok(())
 }

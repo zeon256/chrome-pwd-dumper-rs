@@ -18,8 +18,8 @@ pub struct Opt {
     #[structopt(short, long, default_value = "json")]
     pub format: String,
 
-    /// File name: only required when `out` is set to `file`
-    #[structopt(name = "FILE", parse(from_os_str), default_value = "dump.json")]
+    /// File name of output file
+    #[structopt(name = "FILE", parse(from_os_str), default_value = "dump")]
     pub file_name: PathBuf,
 
     /// Print to stdout
