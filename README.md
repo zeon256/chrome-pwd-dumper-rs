@@ -46,13 +46,13 @@ ARGS:
         accounts: [
             DecryptedAccount {
                 website: "https://app.houseparty.com/login",
-                username_value: "xXxJohnCena420xXx",
-                pwd: "xXxJohnCena420xXx",
+                username_value: "xXxChromeSlayer420xXx",
+                pwd: "xXxChromeSlayer420xXx",
             },
             DecryptedAccount {
                 website: "https://accounts.google.com/signin/v2/challenge/password/empty",
-                username_value: "xXxJohnCena420xXx",
-                pwd: "xXxJohnCena420xXx",
+                username_value: "xXxChromeSlayer420xXx",
+                pwd: "xXxChromeSlayer420xXx",
             },
         ],
     },
