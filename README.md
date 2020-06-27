@@ -36,7 +36,7 @@ ARGS:
 
 ## Example Usage
 ```
-.\chrome-pwd-dumper.exe -b edge -f json -p dump2
+.\chrome-pwd-dumper.exe -b edge chromium -f json -p dump2
 [
     Dumper {
         app_info: AppInfo {
