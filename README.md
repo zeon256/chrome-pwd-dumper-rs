@@ -5,6 +5,28 @@ A Windows Chromium based password dumper written in rust
   <img width="500" height="380" src="./logo.png">
 </p>
 
+## Supported browsers
+- Microsoft Edge
+- Google Chrome
+- Chromium
+- 7star
+- Amigo
+- Brave
+- Cent Browser
+- Chedot
+- Chrome Canary
+- Coccoc Browser
+- Comodo Dragon
+- Elements Browser
+- Epic Privacy Browser
+- Kometa
+- Orbitum
+- Sputnik
+- Torch Browser
+- uCozMedia Uran
+- Vivaldi
+- Mail.Ru Atom
+
 ## Compatibility
 - Tested Microsoft Windows 10 Education 64-bit (Build 17763)
 
