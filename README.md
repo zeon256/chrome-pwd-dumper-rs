@@ -29,6 +29,7 @@ A Windows Chromium based password dumper written in rust
 
 ## Compatibility
 - Tested Microsoft Windows 10 Education 64-bit (Build 17763)
+- Tested Microsoft Windows 7 SP1 64-bit (Build 7601)
 
 You can make a PR if it works on older versions of Windows
 
