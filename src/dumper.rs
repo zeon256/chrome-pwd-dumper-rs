@@ -1,13 +1,13 @@
 use crate::decryption_core::crypt_unprotect_data;
 use crate::models::{ChromeAccount, DecryptedAccount, LocalState};
+use crate::DumperResult;
 use app_dirs::{get_app_dir, AppDataType, AppInfo};
 use rusqlite::{Connection, NO_PARAMS};
 use std::fmt::Debug;
 use std::fs::File;
-use std::io::{BufReader, Read, Cursor, Write, Seek, SeekFrom};
-use std::path::{Path, PathBuf};
+use std::io::{BufReader, Read};
+use std::path::PathBuf;
 use std::{fmt, fs};
-use crate::DumperResult;
 
 impl From<rusqlite::Error> for DumperError {
     fn from(e: rusqlite::Error) -> Self {

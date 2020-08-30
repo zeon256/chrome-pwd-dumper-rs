@@ -56,7 +56,9 @@ fn main() -> DumperResult<()> {
         opt.browsers = browsers.keys().map(|v| v.to_string()).collect::<Vec<_>>();
     }
 
-    let data = opt.browsers.into_iter()
+    let data = opt
+        .browsers
+        .into_iter()
         .filter_map(|v| browsers.get(v.as_str()).cloned())
         .map(|mut v| v.dump().map(|_| v))
         .filter_map(|v| v.ok())

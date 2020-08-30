@@ -1,7 +1,7 @@
 use argh::FromArgs;
 use std::ffi::OsString;
 
-#[derive(Debug,FromArgs)]
+#[derive(Debug, FromArgs)]
 /// Windows Chromium based password dumper that doesn't require admin rights
 pub struct Opt {
     /// select a browser. If left blank, program will try to get all the data available.
