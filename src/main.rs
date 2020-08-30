@@ -2,25 +2,22 @@
 extern crate serde;
 #[macro_use]
 extern crate lazy_static;
-#[macro_use]
-extern crate structopt;
 
 use crate::args::Opt;
 use crate::dumper::{Dumper, DumperError};
 use std::collections::HashMap;
 use std::fs;
-use std::sync::Mutex;
-use structopt::StructOpt;
-use std::path::{PathBuf, Path};
 
 mod args;
 mod decryption_core;
 mod dumper;
 mod models;
 
+pub type DumperResult<T> = Result<T, DumperError>;
+
 #[rustfmt::skip]
 lazy_static! {
-    static ref BROWSERS: Mutex<HashMap<&'static str, Dumper>> = {
+    pub static ref BROWSERS: HashMap<&'static str, Dumper> = {
         let mut hm = HashMap::new();
         hm.insert("edge", Dumper::new("Edge", "Microsoft"));
         hm.insert("chromium", Dumper::new("", "Chromium"));
@@ -43,56 +40,43 @@ lazy_static! {
         hm.insert("vivaldi", Dumper::new("", "Vivaldi"));
         hm.insert("atom-mailru", Dumper::new("Atom", "Mail.Ru"));
 
-        Mutex::new(hm)
+        hm
     };
 }
 
-fn main() -> Result<(), DumperError> {
-    let mut opt: Opt = Opt::from_args();
+fn main() -> DumperResult<()> {
+    let mut opt: Opt = argh::from_env();
     fs::remove_dir_all("./.tmp");
     fs::create_dir("./.tmp")?;
 
-    let browsers = &mut *BROWSERS.lock().unwrap();
-    // check if all browsers selected
-    let data = if opt.browsers[0].eq("all") {
-        browsers
-            .iter_mut()
-            .map(|dumper| {
-                let res = dumper.1.dump();
-                (dumper, res)
-            })
-            .filter(|v| v.1.is_ok())
-            .map(|v| ((v.0).1).clone())
-            .collect::<Vec<_>>()
-    } else {
-        opt.browsers
-            .iter()
-            .filter_map(|v| browsers.remove(v.as_str()))
-            .map(|mut v| {
-                let res = v.dump();
-                (v, res)
-            })
-            .filter(|v| v.1.is_ok())
-            .map(|v| v.0)
-            .collect::<Vec<_>>()
-    };
+    let browsers = &mut BROWSERS.clone();
+
+    if opt.browsers[0].eq("all") {
+        opt.browsers.clear();
+        opt.browsers = browsers.keys().map(|v| v.to_string()).collect::<Vec<_>>();
+    }
+
+    let data = opt.browsers.into_iter()
+        .filter_map(|v| browsers.get(v.as_str()).cloned())
+        .map(|mut v| v.dump().map(|_| v))
+        .filter_map(|v| v.ok())
+        .collect::<Vec<_>>();
 
     if opt.print {
         println!("{:#?}", data);
     }
 
-    let buf = if opt.format.eq("json") {
-        serde_json::to_string_pretty(data.as_slice())
-            .map_err(|e| DumperError::JsonError(e))?
+    let mut path = opt.file_name;
+
+    let buf = if opt.json {
+        path.push(".json");
+        serde_json::to_string_pretty(data.as_slice()).map_err(|e| DumperError::JsonError(e))?
     } else {
+        path.push(".txt");
         format!("{:#?}", data)
     };
 
-    let mut path = opt.file_name.into_os_string();
-    path.push(".");
-    path.push(opt.format.as_str());
-
-    fs::write(path, buf.as_bytes()).map_err(|_| DumperError::IoError);
+    fs::write(path, buf.as_bytes())?;
     fs::remove_dir_all("./.tmp");
     Ok(())
 }
