@@ -1,13 +1,13 @@
-use crate::args::Opt;
 use crate::decryption_core::crypt_unprotect_data;
 use crate::models::{ChromeAccount, DecryptedAccount, LocalState};
 use app_dirs::{get_app_dir, AppDataType, AppInfo};
 use rusqlite::{Connection, NO_PARAMS};
 use std::fmt::Debug;
 use std::fs::File;
-use std::io::{BufReader, Read};
+use std::io::{BufReader, Read, Cursor, Write, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::{fmt, fs};
+use crate::DumperResult;
 
 impl From<rusqlite::Error> for DumperError {
     fn from(e: rusqlite::Error) -> Self {
@@ -63,7 +63,7 @@ impl Dumper {
     const STMT: &'static str = "SELECT action_url, username_value, password_value FROM logins";
 
     /// Look for the local_state file
-    fn find_browser_local_state(&self) -> Result<PathBuf, DumperError> {
+    fn find_browser_local_state(&self) -> DumperResult<PathBuf> {
         let path = match self.app_info.name {
             "User Data" => "/Local State",
             _ => "User Data/Local State",
@@ -74,7 +74,7 @@ impl Dumper {
     }
 
     /// Copies the database and writes to a file in /.tmp
-    fn cp_login_db(&self) -> Result<PathBuf, DumperError> {
+    fn cp_login_db(&self) -> DumperResult<PathBuf> {
         let path = match self.app_info.name {
             "User Data" => "/Default/Login Data",
             _ => "User Data/Default/Login Data",
@@ -90,7 +90,7 @@ impl Dumper {
     }
 
     /// Tried to read local_state file
-    fn read_local_state(&mut self) -> Result<LocalState, DumperError> {
+    fn read_local_state(&mut self) -> DumperResult<LocalState> {
         let path = self.find_browser_local_state()?;
         let file = File::open(path)?;
         let mut reader = BufReader::new(file);
@@ -101,7 +101,7 @@ impl Dumper {
     }
 
     /// Queries account in sqlite db file
-    fn query_accounts(&self) -> Result<Vec<ChromeAccount>, DumperError> {
+    fn query_accounts(&self) -> DumperResult<Vec<ChromeAccount>> {
         let db_url = self.cp_login_db()?;
         let conn = Connection::open(db_url)?;
         let mut stmt = conn.prepare(Self::STMT)?;
@@ -117,7 +117,7 @@ impl Dumper {
     }
 
     /// Tries to dump data to struct account vec
-    pub fn dump(&mut self) -> Result<(), DumperError> {
+    pub fn dump(&mut self) -> DumperResult<()> {
         let local_state = self.read_local_state().ok();
         if let Some(local_state) = local_state {
             let mut decoded_encryption_key =
@@ -158,8 +158,4 @@ impl Dumper {
 
         Ok(())
     }
-}
-
-pub fn write_to_file<P: AsRef<Path>>(path: P, buf: &[u8]) -> Result<(), DumperError> {
-    fs::write(path, buf).map_err(|_| DumperError::IoError)
 }
