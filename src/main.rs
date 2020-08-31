@@ -1,12 +1,11 @@
 #[macro_use]
 extern crate serde;
-#[macro_use]
-extern crate lazy_static;
 
 use crate::args::Opt;
 use crate::dumper::{Dumper, DumperError};
 use std::collections::HashMap;
 use std::fs;
+use lazy_static::lazy_static;
 
 mod args;
 mod decryption_core;
@@ -46,10 +45,16 @@ lazy_static! {
 
 fn main() -> DumperResult<()> {
     let mut opt: Opt = argh::from_env();
+
+    // error can be ignored
     fs::remove_dir_all("./.tmp");
     fs::create_dir("./.tmp")?;
 
     let browsers = &mut BROWSERS.clone();
+
+    if opt.browsers.is_empty() {
+        return Err(DumperError::BrowserNotFound)
+    }
 
     if opt.browsers[0].eq("all") {
         opt.browsers.clear();
@@ -79,6 +84,6 @@ fn main() -> DumperResult<()> {
     };
 
     fs::write(path, buf.as_bytes())?;
-    fs::remove_dir_all("./.tmp");
+    fs::remove_dir_all("./.tmp")?;
     Ok(())
 }
