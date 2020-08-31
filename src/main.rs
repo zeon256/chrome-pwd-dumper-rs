@@ -3,9 +3,9 @@ extern crate serde;
 
 use crate::args::Opt;
 use crate::dumper::{Dumper, DumperError};
+use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::fs;
-use lazy_static::lazy_static;
 
 mod args;
 mod decryption_core;
@@ -53,7 +53,7 @@ fn main() -> DumperResult<()> {
     let browsers = &mut BROWSERS.clone();
 
     if opt.browsers.is_empty() {
-        return Err(DumperError::BrowserNotFound)
+        return Err(DumperError::BrowserNotFound);
     }
 
     if opt.browsers[0].eq("all") {

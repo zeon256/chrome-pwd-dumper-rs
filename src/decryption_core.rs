@@ -18,7 +18,7 @@ pub fn aes_gcm_256(key_buf: &mut [u8], pwd_buf: &[u8]) -> Result<String, DumperE
     String::from_utf8(plaintext).map_err(|_| DumperError::FromUtf8Error)
 }
 
-/// General call to DPAPI's fn
+/// Wrapper around DPAPI `CryptUnprotectData`
 pub fn crypt_unprotect_data(data_buf: &mut [u8]) -> Result<Vec<u8>, DumperError> {
     let buf_ptr = data_buf.as_mut_ptr();
     let buf_len = data_buf.len();
