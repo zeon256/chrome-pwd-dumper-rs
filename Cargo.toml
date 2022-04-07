@@ -2,7 +2,7 @@
 name = "chrome-pwd-dumper"
 version = "0.4.0"
 authors = ["Budi Syahiddin <me@inve.rs>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 app_dirs = { git = "https://github.com/BudiNverse/app-dirs-rs.git" }
