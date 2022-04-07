@@ -77,7 +77,7 @@ fn main() -> DumperResult<()> {
 
     let buf = if opt.json {
         path.push(".json");
-        serde_json::to_string_pretty(data.as_slice()).map_err(|e| DumperError::JsonError(e))?
+        serde_json::to_string_pretty(data.as_slice()).map_err(DumperError::JsonError)?
     } else {
         path.push(".txt");
         format!("{:#?}", data)
