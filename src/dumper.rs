@@ -96,8 +96,7 @@ impl Dumper {
         let mut reader = BufReader::new(file);
         reader.read_to_string(&mut self.local_state_buf)?;
 
-        Ok(serde_json::from_str(self.local_state_buf.as_str())
-            .map_err(|e| DumperError::JsonError(e))?)
+        serde_json::from_str(self.local_state_buf.as_str()).map_err(DumperError::JsonError)
     }
 
     /// Queries account in sqlite db file
@@ -132,9 +131,9 @@ impl Dumper {
                 .filter(|acc| !acc.encrypted_pwd.is_empty() && !acc.website.is_empty())
                 .map(|acc| {
                     let res = DecryptedAccount::from_chrome_acc(acc.clone(), None);
-                    if let Err(_) = res {
+                    if res.is_err() {
                         DecryptedAccount::from_chrome_acc(
-                            acc.clone(),
+                            acc,
                             Some(master_key.as_mut_slice()),
                         )
                     } else {
