@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 app_dirs = { git = "https://github.com/BudiNverse/app-dirs-rs.git" }
 rusqlite = { version = "0.23.1", features = ["bundled"]}
-aes-gcm = "0.6.0"
+aes-gcm = "0.9.4"
 serde = { version = "1.0.114", features = ["derive"]}
 serde_json = "1.0.55"
 base64 = "0.12.3"
