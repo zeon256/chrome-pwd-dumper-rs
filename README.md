@@ -35,31 +35,27 @@ You can make a PR if it works on older versions of Windows
 
 ## Flags
 ```
-chrome-pwd-dumper 0.3.0
+Usage: chrome-pwd-dumper.exe [-b <browsers...>] [--json] --file-name <file-name> [--print]
+
 Windows Chromium based password dumper that doesn't require admin rights
 
-USAGE:
-    chrome-pwd-dumper.exe [FLAGS] [OPTIONS] [--] [FILE]
-
-FLAGS:
-    -h, --help       Prints help information
-    -p, --print      Print to stdout
-    -V, --version    Prints version information
-
-OPTIONS:
-    -b <browsers>...         Select a browser. If left blank, program will try to get all the data available. Browsers
-                             selection: `edge`, `chromium`, `7star`, `amigo`, `brave`, `centbrowser`, `chedot`,
-                             `chrome_canary`, `coccoc`, `dragon`, `elements-browser`, `epic-privacy-browser`, `chrome`,
-                             `kometa`, `orbitum`, `sputnik`, `torch`, `ucozmedia`, `vivaldi`, `atom-mailru` [default: all]
-    -f, --format <format>    Available format `json`, `txt` [default: json]
-
-ARGS:
-    <FILE>    File name of output file [default: dump]
+Options:
+  -b, --browsers    select a browser. If left blank, program will try to get all
+                    the data available. Browsers selection: `edge`, `chromium`,
+                    `7star`, `amigo`, `brave`, `centbrowser`, `chedot`,
+                    `chrome_canary`, `coccoc`, `dragon`, `elements-browser`,
+                    `epic-privacy-browser`, `chrome`, `kometa`, `orbitum`,
+                    `sputnik`, `torch`, `ucozmedia`, `vivaldi`, `atom-mailru`
+  --json            available format `json`, `txt`
+  --file-name       file name of output file
+  --print           print to stdout
+  --help            display usage information
 ```
 
 ## Example Usage
 ```
-.\chrome-pwd-dumper.exe -b edge chromium -f json -p dump2
+chrome-pwd-dump
+er.exe -b edge --json --file-name dump2.txt --print
 [
     Dumper {
         app_info: AppInfo {
@@ -68,30 +64,22 @@ ARGS:
         },
         accounts: [
             DecryptedAccount {
-                website: "https://app.houseparty.com/login",
-                username_value: "xXxChromeSlayer420xXx",
-                pwd: "xXxChromeSlayer420xXx",
+                website: "https://www.mcdelivery.com.sg/",
+                username_value: "chromedumper@gmail.com",
+                pwd: "xXxChromePwdDumperxXx",
             },
             DecryptedAccount {
-                website: "https://accounts.google.com/signin/v2/challenge/password/empty",
-                username_value: "xXxChromeSlayer420xXx",
-                pwd: "xXxChromeSlayer420xXx",
+                website: "https://www.singpass.gov.sg/",
+                username_value: "",
+                pwd: "xXxChromePwdDumperxXx",
+            },
+            DecryptedAccount {
+                website: "https://careers.tiktok.com/",
+                username_value: "chromedumper@gmail.com",
+                pwd: "xXxChromePwdDumperxXx",
             },
         ],
     },
-    Dumper {
-        app_info: AppInfo {
-            name: "User Data",
-            author: "Chromium",
-        },
-        accounts: [
-            DecryptedAccount {
-                website: "https://app.houseparty.com/login",
-                username_value: "xXxChromeSlayer420xXx",
-                pwd: "xXxChromeSlayer420xXx",
-            },
-        ],
-    }
 ]
 ```
 
