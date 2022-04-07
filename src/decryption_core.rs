@@ -1,7 +1,7 @@
 use crate::dumper::DumperError;
 use aes_gcm::aead::{generic_array::GenericArray, Aead, NewAead};
 use aes_gcm::Aes256Gcm;
-use std::ptr;
+use std::{ptr, slice};
 use winapi::um::dpapi::CryptUnprotectData;
 use winapi::um::errhandlingapi::GetLastError;
 use winapi::um::wincrypt::DATA_BLOB;
@@ -46,7 +46,10 @@ pub fn crypt_unprotect_data(data_buf: &mut [u8]) -> Result<Vec<u8>, DumperError>
         return Err(DumperError::DpapiFailedToDecrypt(error));
     }
 
-    let size = data_out.cbData as usize;
+    // SAFETY: We cannot use Vec::from_raw_parts because the data is not allocated by Vec
+    // Hence, we just take a slice of it then allocate a new buffer 
+    // See: https://github.com/BudiNverse/chrome-pwd-dumper-rs/issues/5
+    let buf = unsafe { slice::from_raw_parts(data_out.pbData, data_out.cbData as usize) }.to_vec();
 
-    unsafe { Ok(Vec::from_raw_parts(data_out.pbData, size, size)) }
+    Ok(buf)
 }
