@@ -54,8 +54,7 @@ Options:
 
 ## Example Usage
 ```
-chrome-pwd-dump
-er.exe -b edge --json --file-name dump2.txt --print
+chrome-pwd-dumper.exe -b edge --json --file-name dump2.txt --print
 [
     Dumper {
         app_info: AppInfo {
