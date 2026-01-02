@@ -1,5 +1,5 @@
 # chrome-pwd-dumper-rs
-A Windows Chromium based password dumper written in rust
+A Windows Chromium based password dumper written in Rust
 
 <p align="center">
   <img width="500" height="380" src="./logo.png">
@@ -93,7 +93,6 @@ cargo rustc --release -- -C target-cpu=native
 // Optimise for binary size
 // Current config builds with opt-level = 3 for performance
 // Change to opt-level = 'z' in Cargo.toml 
-
 ```
 
 ## License
