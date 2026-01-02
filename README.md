@@ -1,4 +1,7 @@
 # chrome-pwd-dumper-rs
+
+> **⚠️ This project is no longer maintained.**
+
 A Windows Chromium based password dumper written in Rust
 
 <p align="center">
