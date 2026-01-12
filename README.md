@@ -1,6 +1,6 @@
 # chrome-pwd-dumper-rs
 
-> **⚠️ This project is no longer maintained. However, the project might still work.**
+> **⚠️ This project is no longer maintained. However, the project might still work. Who knows**
 
 A Windows Chromium based password dumper written in Rust
 
