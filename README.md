@@ -9,6 +9,7 @@ A Windows Chromium based password dumper written in Rust
 </p>
 
 ## Supported browsers
+
 - Microsoft Edge
 - Google Chrome
 - Chromium
@@ -31,12 +32,14 @@ A Windows Chromium based password dumper written in Rust
 - Mail.Ru Atom
 
 ## Compatibility
+
 - Tested Microsoft Windows 10 Education 64-bit (Build 17763)
 - Tested Microsoft Windows 7 SP1 64-bit (Build 7601)
 
 You can make a PR if it works on older versions of Windows
 
 ## Flags
+
 ```
 Usage: chrome-pwd-dumper.exe [-b <browsers...>] [--json] --file-name <file-name> [--print]
 
@@ -56,6 +59,7 @@ Options:
 ```
 
 ## Example Usage
+
 ```
 chrome-pwd-dumper.exe -b edge --json --file-name dump2.txt --print
 [
@@ -86,6 +90,7 @@ chrome-pwd-dumper.exe -b edge --json --file-name dump2.txt --print
 ```
 
 ## How to build
+
 ```
 // recommended
 cargo build --release
@@ -99,4 +104,5 @@ cargo rustc --release -- -C target-cpu=native
 ```
 
 ## License
+
 chrome-pwd-dumper-rs is licensed under MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
