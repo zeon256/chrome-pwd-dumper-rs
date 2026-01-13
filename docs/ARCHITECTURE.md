@@ -96,9 +96,11 @@ graph TD
 ## Key Components Detail
 
 ### Browser Detection
+
 The tool uses a predefined list of `AppInfo` structures mapping known browser names (e.g., "Chrome", "Edge", "Brave") to their expected directory paths within the user's `AppData`.
 
 ### Cryptography
+
 1.  **Master Key (Chrome v80+)**:
     *   Chrome stores a master key in the `Local State` JSON file.
     *   This key starts with `DPAPI` and is encrypted using Windows DPAPI.
